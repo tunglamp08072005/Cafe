@@ -17,6 +17,7 @@ public class MenuItem {
         this.availability = availability;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -57,7 +58,7 @@ public class MenuItem {
         this.description = description;
     }
 
-    public boolean isAvailability() {
+    public boolean isAvailable() {
         return availability;
     }
 
@@ -67,9 +68,9 @@ public class MenuItem {
 
     @Override
     public String toString() {
-        return "MenuItem{id=" + id + ", name=" + name + '\'' +
-                ", type=" + type + '\'' + ", price=" + price +
-                ", description=" + description + '\'' +
+        return "MenuItem{id=" + id + ", name='" + name + '\'' +
+                ", type='" + type + '\'' + ", price=" + price +
+                ", description='" + description + '\'' +
                 ", availability=" + (availability ? "Available" : "Not Available") + '}';
     }
 }
