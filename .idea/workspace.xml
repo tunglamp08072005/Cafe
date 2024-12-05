@@ -45,6 +45,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Tung_Lam\Java\Cafe\src\main\java\org\example\coffeeshop" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -66,7 +71,9 @@
       <workItem from="1733151952286" duration="401000" />
       <workItem from="1733152401197" duration="119000" />
       <workItem from="1733189182541" duration="298000" />
-      <workItem from="1733277715717" duration="397000" />
+      <workItem from="1733277715717" duration="450000" />
+      <workItem from="1733372717977" duration="135000" />
+      <workItem from="1733372875805" duration="681000" />
     </task>
     <servers />
   </component>
