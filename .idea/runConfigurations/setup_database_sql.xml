@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="setup_database.sql" type="DatabaseScript" editBeforeRun="true">
+    <script-file value="$APPLICATION_CONFIG_DIR$/consoles/db/fdae8b3c-526d-4baa-adee-475d16569013/console.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="fdae8b3c-526d-4baa-adee-475d16569013" namespace="schema/&quot;coffee_shop&quot;" />
+    <method v="2" />
+  </configuration>
+</component>
