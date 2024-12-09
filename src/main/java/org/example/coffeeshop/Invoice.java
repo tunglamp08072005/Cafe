@@ -16,6 +16,15 @@ public class Invoice {
         this.status = status;
     }
 
+    public Invoice(int id, String customerName, double totalAmount, boolean status) {
+        this.id = id;
+        this.customerName = customerName;
+        this.totalAmount = totalAmount;
+        this.status = status;
+        this.orderItems = null;
+    }
+
+
     public int getId() {
         return id;
     }
