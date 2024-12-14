@@ -6,64 +6,59 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Data Access Object for Employees. */
 public class EmployeeDAO {
+    public List<Employee> getAllEmployees() {
+        List<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM employees";
 
-    public void addEmployee(Employee employee) {
-        String query = "INSERT INTO Employees (name, position, salary) VALUES (?, ?, ?)";
         try (Connection connection = DatabaseConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, employee.getName());
-            preparedStatement.setString(2, employee.getPosition());
-            preparedStatement.setDouble(3, employee.getSalary());
-            preparedStatement.executeUpdate();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String position = resultSet.getString("position");
+                double salary = resultSet.getDouble("salary");
+
+                // Tạo đối tượng Employee với 4 tham số
+                employees.add(new Employee(id, name, position, salary));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return employees;
     }
 
-    public void updateEmployee(Employee employee) {
-        String query = "UPDATE Employees SET name = ?, position = ?, salary = ? WHERE id = ?";
+    public void addEmployee(Employee employee) {
+        String query = "INSERT INTO employees (name, position, salary) VALUES (?, ?, ?)";
+
         try (Connection connection = DatabaseConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, employee.getName());
-            preparedStatement.setString(2, employee.getPosition());
-            preparedStatement.setDouble(3, employee.getSalary());
-            preparedStatement.setInt(4, employee.getId());
-            preparedStatement.executeUpdate();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, employee.getName());
+            statement.setString(2, employee.getPosition());
+            statement.setDouble(3, employee.getSalary());
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void deleteEmployee(int id) {
-        String query = "DELETE FROM Employees WHERE id = ?";
-        try (Connection connection = DatabaseConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+        String query = "DELETE FROM employees WHERE id = ?";
 
-    public List<Employee> getAllEmployees() {
-        List<Employee> employees = new ArrayList<>();
-        String query = "SELECT * FROM Employees";
         try (Connection connection = DatabaseConnector.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
-            while (resultSet.next()) {
-                Employee employee = new Employee(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("position"),
-                        resultSet.getDouble("salary")
-                );
-                employees.add(employee);
-            }
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return employees;
     }
 }

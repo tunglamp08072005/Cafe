@@ -1,29 +1,25 @@
 package org.example.coffeeshop;
 
+/** Represents a menu item in the coffee shop. */
 public class MenuItem {
-    private int id;
+    private final int id;
     private String name;
-    private String type;
     private double price;
     private String description;
-    private boolean availability;
+    private boolean isAvailable;
 
-    public MenuItem(int id, String name, String type, double price, String description, boolean availability) {
+    // Constructor
+    public MenuItem(int id, String name, double price, String description, boolean isAvailable) {
         this.id = id;
         this.name = name;
-        this.type = type;
         this.price = price;
         this.description = description;
-        this.availability = availability;
+        this.isAvailable = isAvailable;
     }
 
     // Getters and Setters
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -32,14 +28,6 @@ public class MenuItem {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public double getPrice() {
@@ -59,18 +47,16 @@ public class MenuItem {
     }
 
     public boolean isAvailable() {
-        return availability;
+        return isAvailable;
     }
 
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
 
     @Override
     public String toString() {
-        return "MenuItem{id=" + id + ", name='" + name + '\'' +
-                ", type='" + type + '\'' + ", price=" + price +
-                ", description='" + description + '\'' +
-                ", availability=" + (availability ? "Available" : "Not Available") + '}';
+        return "MenuItem [id=" + id + ", name=" + name + ", price=" + price +
+                ", description=" + description + ", available=" + isAvailable + "]";
     }
 }

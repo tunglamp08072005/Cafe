@@ -1,75 +1,57 @@
 package org.example.coffeeshop;
+
 import java.util.List;
 
+/** Represents an invoice in the coffee shop. */
 public class Invoice {
-    private int id;
-    private String customerName;
-    private List<MenuItem> orderItems;
+    private final int id;
+    private final String customerName;
+    private final List<MenuItem> orderList;
     private double totalAmount;
-    private boolean status;
+    private boolean isPaid;
 
-    public Invoice(int id, String customerName, List<MenuItem> orderItems, double totalAmount, boolean status) {
+    // Constructor
+    public Invoice(int id, String customerName, List<MenuItem> orderList, boolean isPaid) {
         this.id = id;
         this.customerName = customerName;
-        this.orderItems = orderItems;
-        this.totalAmount = totalAmount;
-        this.status = status;
+        this.orderList = orderList;
+        this.totalAmount = calculateTotal();
+        this.isPaid = isPaid;
     }
 
-    public Invoice(int id, String customerName, double totalAmount, boolean status) {
-        this.id = id;
-        this.customerName = customerName;
-        this.totalAmount = totalAmount;
-        this.status = status;
-        this.orderItems = null;
+    // Calculate the total amount
+    private double calculateTotal() {
+        return orderList.stream().mapToDouble(MenuItem::getPrice).sum();
     }
 
-
+    // Getters and Setters
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public List<MenuItem> getOrderList() {
+        return orderList;
     }
 
-    public List<MenuItem> getOrderItems() {
-        return orderItems;
+    public boolean isPaid() {
+        return isPaid;
     }
 
-    public void setOrderItems(List<MenuItem> orderItems) {
-        this.orderItems = orderItems;
+    public void setPaid(boolean isPaid) {
+        this.isPaid = isPaid;
     }
-
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public boolean isPaid() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 
     @Override
     public String toString() {
-        return "Invoice{id=" + id + ", customerName='" + customerName + '\'' +
-                ", totalAmount=" + totalAmount + ", status=" + (status ? "Paid" : "Unpaid") + '}';
+        return "Invoice [id=" + id + ", customerName=" + customerName +
+                ", totalAmount=" + totalAmount + ", isPaid=" + isPaid + "]";
     }
-
-
 }
