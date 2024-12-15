@@ -68,16 +68,37 @@ public class InvoicePanel extends JPanel {
         return buttonPanel;
     }
 
-    private void addInvoice() {
+    private boolean isNumeric(String str, boolean isInteger) {
         try {
-            String idText = idField.getText();
-            String totalAmountText = totalAmountField.getText();
+            if (isInteger) {
+                Integer.parseInt(str);  // Kiểm tra ID là số nguyên
+            } else {
+                Double.parseDouble(str);  // Kiểm tra Tổng Số Tiền là số thực
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
+
+
+    private void addInvoice() {
+        String idText = idField.getText();
+        String totalAmountText = totalAmountField.getText();
+
+        try {
             // Kiểm tra xem các trường nhập liệu có rỗng không
             if (idText.isEmpty() || totalAmountText.isEmpty() || customerNameField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
                 return;
             }
+            // Kiểm tra định dạng ID và Tổng Số Tiền
+            if (!isNumeric(idText, true) || !isNumeric(totalAmountText, false)) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số cho ID và Tổng số tiền.");
+                return;
+            }
+
 
             int id = Integer.parseInt(idText);
             double totalAmount = Double.parseDouble(totalAmountText);
@@ -85,12 +106,15 @@ public class InvoicePanel extends JPanel {
             Invoice invoice = new Invoice(id, customerNameField.getText(), null, false);
             invoice.setTotalAmount(totalAmount);
             invoiceDAO.addInvoice(invoice);
+
             JOptionPane.showMessageDialog(this, "Hóa đơn đã được thêm.");
             clearInputFields();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();  // In ra chi tiết lỗi
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm hóa đơn: " + ex.getMessage());
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số cho ID và Tổng số tiền.");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi thêm hóa đơn: " + ex.getMessage());
         }
     }
 

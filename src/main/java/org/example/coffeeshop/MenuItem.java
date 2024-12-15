@@ -2,7 +2,7 @@ package org.example.coffeeshop;
 
 /** Represents a menu item in the coffee shop. */
 public class MenuItem {
-    private final int id;
+    private int id;
     private String name;
     private double price;
     private String description;
@@ -20,6 +20,10 @@ public class MenuItem {
     // Getters and Setters
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {  // Thêm phương thức setId
+        this.id = id;
     }
 
     public String getName() {

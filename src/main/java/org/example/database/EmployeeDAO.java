@@ -33,16 +33,27 @@ public class EmployeeDAO {
     }
 
     public void addEmployee(Employee employee) {
-        String query = "INSERT INTO employees (name, position, salary) VALUES (?, ?, ?)";
+        String query = "SELECT MAX(id) FROM employees"; // Lấy ID lớn nhất
 
         try (Connection connection = DatabaseConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
 
-            statement.setString(1, employee.getName());
-            statement.setString(2, employee.getPosition());
-            statement.setDouble(3, employee.getSalary());
+            int nextId = 1; // Nếu bảng trống, bắt đầu từ 1
 
-            statement.executeUpdate();
+            if (resultSet.next()) {
+                nextId = resultSet.getInt(1) + 1; // Tăng ID lớn nhất lên 1
+            }
+
+            String insertQuery = "INSERT INTO employees (id, name, position, salary) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                insertStatement.setInt(1, nextId); // Sử dụng ID đã tính toán
+                insertStatement.setString(2, employee.getName());
+                insertStatement.setString(3, employee.getPosition());
+                insertStatement.setDouble(4, employee.getSalary());
+
+                insertStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

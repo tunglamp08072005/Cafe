@@ -4,9 +4,7 @@ import org.example.coffeeshop.Invoice;
 import org.example.coffeeshop.MenuItem;
 import org.example.database.MenuItemDAO;
 import org.example.api.MenuAPI;
-import org.example.api.SeasonalMenuAPI; // Thêm import SeasonalMenuAPI
 import org.example.api.PaymentAPI;
-
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -21,9 +19,7 @@ public class MenuPanel extends JPanel {
     private List<MenuItem> menuItems;
     private final MenuItemDAO menuItemDAO;
     private final MenuAPI menuAPI; // Khởi tạo đối tượng MenuAPI
-    private final SeasonalMenuAPI seasonalMenuAPI; // Khởi tạo đối tượng SeasonalMenuAPI
     private final PaymentAPI paymentAPI; // Khai báo PaymentAPI
-
 
     public MenuPanel() {
         setLayout(new BorderLayout());
@@ -31,9 +27,7 @@ public class MenuPanel extends JPanel {
         // Initialize DAO và API
         menuItemDAO = new MenuItemDAO();
         menuAPI = new MenuAPI(); // Khởi tạo MenuAPI
-        seasonalMenuAPI = new SeasonalMenuAPI(); // Khởi tạo SeasonalMenuAPI
         paymentAPI = new PaymentAPI(); // Khởi tạo PaymentAPI
-
 
         // Create table model
         String[] columnNames = {"ID", "Name", "Price", "Description", "Available"};
@@ -78,21 +72,18 @@ public class MenuPanel extends JPanel {
         JButton editButton = new JButton("Edit Item");
         JButton deleteButton = new JButton("Delete Item");
         JButton fetchSpecialButton = new JButton("Fetch Special Menu Items");
-        JButton fetchSeasonalButton = new JButton("Fetch Seasonal Menu"); // Button for seasonal menu
         JButton processPaymentButton = new JButton("Process Payment");
 
         addButton.addActionListener(e -> addMenuItem());
         editButton.addActionListener(e -> editMenuItem());
         deleteButton.addActionListener(e -> deleteMenuItem());
         fetchSpecialButton.addActionListener(e -> fetchSpecialMenuItems());
-        fetchSeasonalButton.addActionListener(e -> fetchSeasonalMenuItems()); // Action for seasonal menu
         processPaymentButton.addActionListener(e -> processPayment());
 
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(fetchSpecialButton);
-        buttonPanel.add(fetchSeasonalButton); // Add seasonal menu button
         buttonPanel.add(processPaymentButton);
 
         return buttonPanel;
@@ -109,10 +100,10 @@ public class MenuPanel extends JPanel {
 
         boolean isAvailable = JOptionPane.showConfirmDialog(this, "Is this item available?", "Availability", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 
-        MenuItem newItem = new MenuItem(0, name, price, description, isAvailable);
+        MenuItem newItem = new MenuItem(0, name, price, description, isAvailable);  // ID = 0, để MySQL tự tạo
 
-        menuItemDAO.addMenuItem(newItem);
-        loadMenuItemsFromDatabase();
+        menuItemDAO.addMenuItem(newItem);  // Thêm món vào DB và lấy ID mới
+        loadMenuItemsFromDatabase();  // Tải lại menu từ DB
         JOptionPane.showMessageDialog(this, "Item added successfully!");
     }
 
@@ -161,28 +152,19 @@ public class MenuPanel extends JPanel {
 
     private void fetchSpecialMenuItems() {
         List<MenuItem> specialMenuItems = menuAPI.fetchSpecialMenuItems();
+
         for (MenuItem item : specialMenuItems) {
+            // Nếu món không có id thì đặt id mặc định là 0 để MySQL tự động tạo id mới
+            item.setId(0);  // Đặt id = 0 để MySQL tự động tăng id
             menuItemDAO.addMenuItem(item);
         }
+
+        // Sau khi thêm, tải lại toàn bộ danh sách từ cơ sở dữ liệu
         loadMenuItemsFromDatabase();
         JOptionPane.showMessageDialog(this, "Special menu items fetched and added!");
     }
 
-    private void fetchSeasonalMenuItems() {
-        String season = JOptionPane.showInputDialog(this, "Enter season (summer/winter/other):");
-        if (season != null && !season.trim().isEmpty()) {
-            List<MenuItem> seasonalItems = seasonalMenuAPI.fetchSeasonalMenuItems(season);
 
-            for (MenuItem item : seasonalItems) {
-                menuItemDAO.addMenuItem(item);  // Optional: Add seasonal items to the database
-            }
-
-            loadMenuItemsFromDatabase();  // Update table with seasonal items
-            JOptionPane.showMessageDialog(this, "Seasonal menu items fetched and added for " + season + " season!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Season input is invalid!");
-        }
-    }
 
     private void processPayment() {
         int[] selectedRows = menuTable.getSelectedRows();

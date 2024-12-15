@@ -69,7 +69,7 @@ public class InvoiceDAO {
     }
 
     public void addInvoice(Invoice invoice) throws SQLException {
-        String insertInvoiceQuery = "INSERT INTO invoices (id, customer_name, paid) VALUES (?, ?, ?)";
+        String insertInvoiceQuery = "INSERT INTO invoices (id, customer_name, is_paid) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertInvoiceQuery)) {
@@ -89,7 +89,7 @@ public class InvoiceDAO {
     }
 
     private void addInvoiceItems(Invoice invoice) throws SQLException {
-        String insertInvoiceItemsQuery = "INSERT INTO invoice_items (invoice_id, menu_item_id) VALUES (?, ?)";
+        String insertInvoiceItemsQuery = "INSERT INTO invoice_items (invoice_id, menu_item_id, quantity) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertInvoiceItemsQuery)) {
@@ -98,12 +98,22 @@ public class InvoiceDAO {
             for (MenuItem menuItem : invoice.getOrderList()) {
                 preparedStatement.setInt(1, invoice.getId());
                 preparedStatement.setInt(2, menuItem.getId());
+                preparedStatement.setInt(3, 1); // Giả sử mỗi món có quantity = 1
                 preparedStatement.addBatch();
             }
 
             // Thực thi batch chèn các món vào bảng invoice_items
             preparedStatement.executeBatch();
         }
+    }
+
+
+    private double calculateTotalAmount(Invoice invoice) {
+        double total = 0.0;
+        for (MenuItem item : invoice.getOrderList()) {
+            total += item.getPrice();  // Giả sử giá của món trong orderList là giá cần tính tổng
+        }
+        return total;
     }
 
     public void updateInvoicePayment(int invoiceId, boolean isPaid) throws SQLException {

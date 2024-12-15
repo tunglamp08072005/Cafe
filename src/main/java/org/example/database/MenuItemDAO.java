@@ -10,7 +10,7 @@ import java.util.List;
 public class MenuItemDAO {
     public List<MenuItem> getAllMenuItems() {
         List<MenuItem> menuItems = new ArrayList<>();
-        String query = "SELECT * FROM menu_items";
+        String query = "SELECT * FROM menu_items ORDER BY id ASC"; // Sắp xếp theo id tăng dần
 
         try (Connection connection = DatabaseConnector.getConnection();
              Statement statement = connection.createStatement();
@@ -36,7 +36,7 @@ public class MenuItemDAO {
         String query = "INSERT INTO menu_items (name, price, description, is_available) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, menuItem.getName());
             statement.setDouble(2, menuItem.getPrice());
@@ -44,6 +44,14 @@ public class MenuItemDAO {
             statement.setBoolean(4, menuItem.isAvailable());
 
             statement.executeUpdate();
+
+            // Lấy ID được tạo tự động từ MySQL
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    menuItem.setId(generatedId);  // Cập nhật ID vào MenuItem
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

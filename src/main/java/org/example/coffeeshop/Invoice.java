@@ -1,5 +1,6 @@
 package org.example.coffeeshop;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Represents an invoice in the coffee shop. */
@@ -10,17 +11,18 @@ public class Invoice {
     private double totalAmount;
     private boolean isPaid;
 
-    // Constructor
     public Invoice(int id, String customerName, List<MenuItem> orderList, boolean isPaid) {
         this.id = id;
         this.customerName = customerName;
-        this.orderList = orderList;
+        this.orderList = orderList != null ? orderList : new ArrayList<>();
         this.totalAmount = calculateTotal();
         this.isPaid = isPaid;
     }
 
-    // Calculate the total amount
     private double calculateTotal() {
+        if (orderList == null) {
+            return 0.0; // Hoặc giá trị mặc định nếu orderList là null
+        }
         return orderList.stream().mapToDouble(MenuItem::getPrice).sum();
     }
 
