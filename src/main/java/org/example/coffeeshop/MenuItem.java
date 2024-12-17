@@ -17,6 +17,11 @@ public class MenuItem {
         this.isAvailable = isAvailable;
     }
 
+    public MenuItem(int id, String name, double price) {
+        this(id, name, price, "", true);  // Gán mặc định cho description và isAvailable
+    }
+
+
     // Getters and Setters
     public int getId() {
         return id;

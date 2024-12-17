@@ -7,7 +7,7 @@ import java.util.List;
 public class Invoice {
     private final int id;
     private final String customerName;
-    private final List<MenuItem> orderList;
+    private List<MenuItem> orderList;
     private double totalAmount;
     private boolean isPaid;
 
@@ -15,13 +15,13 @@ public class Invoice {
         this.id = id;
         this.customerName = customerName;
         this.orderList = orderList != null ? orderList : new ArrayList<>();
-        this.totalAmount = calculateTotal();
+        this.totalAmount = orderList != null ? calculateTotal() : 0.0;
         this.isPaid = isPaid;
     }
 
     private double calculateTotal() {
-        if (orderList == null) {
-            return 0.0; // Hoặc giá trị mặc định nếu orderList là null
+        if (orderList == null || orderList.isEmpty()) {
+            return 0.0; // Trả về 0 nếu không có món ăn nào
         }
         return orderList.stream().mapToDouble(MenuItem::getPrice).sum();
     }
@@ -55,5 +55,10 @@ public class Invoice {
     public String toString() {
         return "Invoice [id=" + id + ", customerName=" + customerName +
                 ", totalAmount=" + totalAmount + ", isPaid=" + isPaid + "]";
+    }
+
+    public void setOrderList(List<MenuItem> orderList) {
+        this.orderList = orderList;
+        this.totalAmount = calculateTotal();  // Tính lại tổng số tiền
     }
 }

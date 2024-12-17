@@ -103,7 +103,7 @@ public class MenuPanel extends JPanel {
         MenuItem newItem = new MenuItem(0, name, price, description, isAvailable);  // ID = 0, để MySQL tự tạo
 
         menuItemDAO.addMenuItem(newItem);  // Thêm món vào DB và lấy ID mới
-        loadMenuItemsFromDatabase();  // Tải lại menu từ DB
+        loadMenuItemsFromDatabase();  // Tải lại menu từ DB và cập nhật bảng
         JOptionPane.showMessageDialog(this, "Item added successfully!");
     }
 
@@ -125,9 +125,8 @@ public class MenuPanel extends JPanel {
             selectedItem.setDescription(newDescription);
             selectedItem.setAvailable(newIsAvailable);
 
-            menuAPI.updateDrinkPrice(selectedItem, newPrice);
-            menuItemDAO.updateMenuItem(selectedItem);
-            loadMenuItemsFromDatabase();
+            menuItemDAO.updateMenuItem(selectedItem); // Cập nhật món ăn trong DB
+            loadMenuItemsFromDatabase();  // Tải lại menu từ DB và cập nhật bảng
             JOptionPane.showMessageDialog(this, "Item updated successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "No item selected!");

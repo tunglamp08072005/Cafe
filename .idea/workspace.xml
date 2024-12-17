@@ -8,13 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/fdae8b3c-526d-4baa-adee-475d16569013.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/fdae8b3c-526d-4baa-adee-475d16569013.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/api/MenuAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/api/MenuAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/api/SeasonalMenuAPI.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/coffeeshop/Invoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/coffeeshop/Invoice.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/coffeeshop/MenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/coffeeshop/MenuItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/database/EmployeeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/database/EmployeeDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/database/DatabaseConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/database/DatabaseConnector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/database/InvoiceDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/database/InvoiceDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/database/MenuItemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/database/MenuItemDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gui/InvoicePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gui/InvoicePanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gui/MenuPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gui/MenuPanel.java" afterDir="false" />
     </list>
@@ -116,7 +113,9 @@
       <workItem from="1734182331887" duration="5478000" />
       <workItem from="1734191259809" duration="310000" />
       <workItem from="1734231959356" duration="4934000" />
-      <workItem from="1734237079309" duration="1467000" />
+      <workItem from="1734237079309" duration="1506000" />
+      <workItem from="1734240029249" duration="52000" />
+      <workItem from="1734401587943" duration="6199000" />
     </task>
     <servers />
   </component>

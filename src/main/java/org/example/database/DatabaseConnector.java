@@ -10,7 +10,7 @@ public class DatabaseConnector {
     private static final String USER = "root"; // Thay bằng username của bạn
     private static final String PASSWORD = "A3_lamsoaica"; // Thay bằng mật khẩu của bạn
 
-    private static Connection connection;
+    static Connection connection;
 
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
