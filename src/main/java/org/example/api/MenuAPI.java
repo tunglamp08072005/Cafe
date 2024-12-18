@@ -60,7 +60,7 @@ public class MenuAPI {
     // Phương thức để cập nhật giá đồ uống từ API bên ngoài (Giả lập)
     public void updateDrinkPrice(MenuItem item, double newPrice) {
         // Lấy thông tin từ API và cập nhật giá đồ uống
-        item.setPrice(newPrice);
+        item.setPrice((int) newPrice);
         System.out.println("Đã cập nhật giá đồ uống " + item.getName() + " thành " + newPrice);
     }
 }

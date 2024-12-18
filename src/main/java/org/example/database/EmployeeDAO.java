@@ -20,9 +20,8 @@ public class EmployeeDAO {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 String position = resultSet.getString("position");
-                double salary = resultSet.getDouble("salary");
+                int salary = resultSet.getInt("salary"); // Đọc salary dưới dạng int
 
-                // Tạo đối tượng Employee với 4 tham số
                 employees.add(new Employee(id, name, position, salary));
             }
         } catch (SQLException e) {
@@ -33,27 +32,17 @@ public class EmployeeDAO {
     }
 
     public void addEmployee(Employee employee) {
-        String query = "SELECT MAX(id) FROM employees"; // Lấy ID lớn nhất
+        String query = "INSERT INTO employees (id, name, position, salary) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnector.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
-            int nextId = 1; // Nếu bảng trống, bắt đầu từ 1
+            statement.setInt(1, employee.getId());
+            statement.setString(2, employee.getName());
+            statement.setString(3, employee.getPosition());
+            statement.setInt(4, employee.getSalary()); // Lưu salary dưới dạng int
 
-            if (resultSet.next()) {
-                nextId = resultSet.getInt(1) + 1; // Tăng ID lớn nhất lên 1
-            }
-
-            String insertQuery = "INSERT INTO employees (id, name, position, salary) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-                insertStatement.setInt(1, nextId); // Sử dụng ID đã tính toán
-                insertStatement.setString(2, employee.getName());
-                insertStatement.setString(3, employee.getPosition());
-                insertStatement.setDouble(4, employee.getSalary());
-
-                insertStatement.executeUpdate();
-            }
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,7 +55,6 @@ public class EmployeeDAO {
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, id);
-
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

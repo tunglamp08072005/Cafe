@@ -30,7 +30,7 @@ public class MenuPanel extends JPanel {
         paymentAPI = new PaymentAPI(); // Khởi tạo PaymentAPI
 
         // Create table model
-        String[] columnNames = {"ID", "Name", "Price", "Description", "Available"};
+        String[] columnNames = {"ID", "Tên", "Giá", "Sự miêu tả", "Có sẵn"};
         tableModel = new DefaultTableModel(columnNames, 0);
 
         // Create table
@@ -58,9 +58,9 @@ public class MenuPanel extends JPanel {
             tableModel.addRow(new Object[]{
                     item.getId(),
                     item.getName(),
-                    item.getPrice(),
+                    (int) item.getPrice(), // Chuyển đổi giá từ double sang int
                     item.getDescription(),
-                    item.isAvailable() ? "Yes" : "No"
+                    item.isAvailable() ? "Có" : "Không"
             });
         }
     }
@@ -68,10 +68,10 @@ public class MenuPanel extends JPanel {
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
 
-        JButton addButton = new JButton("Add Item");
-        JButton editButton = new JButton("Edit Item");
-        JButton deleteButton = new JButton("Delete Item");
-        JButton fetchSpecialButton = new JButton("Fetch Special Menu Items");
+        JButton addButton = new JButton("Thêm đồ uống");
+        JButton editButton = new JButton("Sửa đồ uống");
+        JButton deleteButton = new JButton("Xóa đồ uống");
+        JButton fetchSpecialButton = new JButton("Nhận các mục menu");
         JButton processPaymentButton = new JButton("Process Payment");
 
         addButton.addActionListener(e -> addMenuItem());
@@ -90,21 +90,34 @@ public class MenuPanel extends JPanel {
     }
 
     private void addMenuItem() {
-        String name = JOptionPane.showInputDialog(this, "Enter item name:");
+        String name = JOptionPane.showInputDialog(this, "Nhập tên đồ uống:");
         if (name == null || name.trim().isEmpty()) return;
 
-        String priceStr = JOptionPane.showInputDialog(this, "Enter item price:");
-        double price = Double.parseDouble(priceStr); // Convert to double
+        String priceStr = JOptionPane.showInputDialog(this, "Nhập giá đồ uống:");
+        if (priceStr == null || priceStr.trim().isEmpty()) return;
 
-        String description = JOptionPane.showInputDialog(this, "Enter item description:");
+        double price;
+        try {
+            price = Double.parseDouble(priceStr); // Convert to double
+            if (price < 0) {
+                JOptionPane.showMessageDialog(this, "Giá không thể âm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Giá nhập không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        boolean isAvailable = JOptionPane.showConfirmDialog(this, "Is this item available?", "Availability", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+        String description = JOptionPane.showInputDialog(this, "Nhập miêu tả đồ uống:");
+        if (description == null || description.trim().isEmpty()) return;
 
-        MenuItem newItem = new MenuItem(0, name, price, description, isAvailable);  // ID = 0, để MySQL tự tạo
+        boolean isAvailable = JOptionPane.showConfirmDialog(this, "Đồ uống này có sẵn không?", "Có sẵn", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+
+        MenuItem newItem = new MenuItem(0, name, (int) price, description, isAvailable);  // ID = 0, để MySQL tự tạo
 
         menuItemDAO.addMenuItem(newItem);  // Thêm món vào DB và lấy ID mới
         loadMenuItemsFromDatabase();  // Tải lại menu từ DB và cập nhật bảng
-        JOptionPane.showMessageDialog(this, "Item added successfully!");
+        JOptionPane.showMessageDialog(this, "Đã thêm đồ uống thành công!");
     }
 
     private void editMenuItem() {
@@ -112,24 +125,39 @@ public class MenuPanel extends JPanel {
         if (selectedRow != -1) {
             MenuItem selectedItem = menuItems.get(selectedRow);
 
-            String newName = JOptionPane.showInputDialog(this, "Edit item name:", selectedItem.getName());
-            String newPriceStr = JOptionPane.showInputDialog(this, "Edit item price:", selectedItem.getPrice());
-            double newPrice = Double.parseDouble(newPriceStr); // Convert to double
+            String newName = JOptionPane.showInputDialog(this, "Chỉnh sửa tên đồ uống:", selectedItem.getName());
+            if (newName == null || newName.trim().isEmpty()) return;
 
-            String newDescription = JOptionPane.showInputDialog(this, "Edit item description:", selectedItem.getDescription());
+            String newPriceStr = JOptionPane.showInputDialog(this, "Chỉnh sửa giá đồ uống:", selectedItem.getPrice());
+            if (newPriceStr == null || newPriceStr.trim().isEmpty()) return;
 
-            boolean newIsAvailable = JOptionPane.showConfirmDialog(this, "Is this item available?", "Availability", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+            double newPrice;
+            try {
+                newPrice = Double.parseDouble(newPriceStr); // Chuyển đổi sang số thực
+                if (newPrice < 0) {
+                    JOptionPane.showMessageDialog(this, "Giá không thể âm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Giá nhập không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String newDescription = JOptionPane.showInputDialog(this, "Chỉnh sửa mô tả  đồ uống:", selectedItem.getDescription());
+            if (newDescription == null || newDescription.trim().isEmpty()) return;
+
+            boolean newIsAvailable = JOptionPane.showConfirmDialog(this, "Đồ uống này có sẵn không?", "Có sẵn", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 
             selectedItem.setName(newName);
-            selectedItem.setPrice(newPrice);
+            selectedItem.setPrice((int) newPrice);
             selectedItem.setDescription(newDescription);
             selectedItem.setAvailable(newIsAvailable);
 
             menuItemDAO.updateMenuItem(selectedItem); // Cập nhật món ăn trong DB
-            loadMenuItemsFromDatabase();  // Tải lại menu từ DB và cập nhật bảng
-            JOptionPane.showMessageDialog(this, "Item updated successfully!");
+            loadMenuItemsFromDatabase(); // Tải lại menu từ DB và cập nhật bảng
+            JOptionPane.showMessageDialog(this, "Đã cập nhật đồ uống thành công!");
         } else {
-            JOptionPane.showMessageDialog(this, "No item selected!");
+            JOptionPane.showMessageDialog(this, "Không có đồ uống nào được chọn!");
         }
     }
 
@@ -137,15 +165,15 @@ public class MenuPanel extends JPanel {
         int selectedRow = menuTable.getSelectedRow();
         if (selectedRow != -1) {
             MenuItem selectedItem = menuItems.get(selectedRow);
-            int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this item?", "Delete Item", JOptionPane.YES_NO_OPTION);
+            int confirmation = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa đồ uống này không?", "Xóa đồ uống", JOptionPane.YES_NO_OPTION);
 
             if (confirmation == JOptionPane.YES_OPTION) {
                 menuItemDAO.deleteMenuItem(selectedItem.getId());
                 loadMenuItemsFromDatabase();
-                JOptionPane.showMessageDialog(this, "Item deleted successfully!");
+                JOptionPane.showMessageDialog(this, "Đã xóa đồ uống thành công!");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "No item selected!");
+            JOptionPane.showMessageDialog(this, "Không có đồ uống nào được chọn!");
         }
     }
 
@@ -155,15 +183,14 @@ public class MenuPanel extends JPanel {
         for (MenuItem item : specialMenuItems) {
             // Nếu món không có id thì đặt id mặc định là 0 để MySQL tự động tạo id mới
             item.setId(0);  // Đặt id = 0 để MySQL tự động tăng id
+            item.setPrice((int) item.getPrice()); // Chuyển giá từ double sang int
             menuItemDAO.addMenuItem(item);
         }
 
         // Sau khi thêm, tải lại toàn bộ danh sách từ cơ sở dữ liệu
         loadMenuItemsFromDatabase();
-        JOptionPane.showMessageDialog(this, "Special menu items fetched and added!");
+        JOptionPane.showMessageDialog(this, "Đã tải xuống và thêm các mục menu!");
     }
-
-
 
     private void processPayment() {
         int[] selectedRows = menuTable.getSelectedRows();

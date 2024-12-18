@@ -1002,7 +1002,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="289" parent="1" name="coffee_shop">
-      <LastIntrospectionLocalTimestamp>2024-12-17.04:05:29</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-12-18.03:14:13</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="information_schema">
@@ -1124,7 +1124,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <column id="318" parent="304" name="salary">
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StoredType>double|0s</StoredType>
+      <StoredType>int|0s</StoredType>
     </column>
     <index id="319" parent="304" name="PRIMARY">
       <ColNames>id</ColNames>
@@ -1199,7 +1199,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <column id="333" parent="306" name="total_amount">
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>double|0s</StoredType>
+      <StoredType>int|0s</StoredType>
     </column>
     <column id="334" parent="306" name="is_paid">
       <DefaultExpression>0</DefaultExpression>
@@ -1235,7 +1235,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <column id="340" parent="307" name="price">
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>double|0s</StoredType>
+      <StoredType>int|0s</StoredType>
     </column>
     <column id="341" parent="307" name="description">
       <Position>4</Position>

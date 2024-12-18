@@ -86,7 +86,7 @@ public class InvoiceDAO {
                     boolean isAvailable = resultSet.getBoolean("is_available"); // Lấy trạng thái có sẵn
 
                     // Tạo MenuItem với đầy đủ tham số
-                    MenuItem menuItem = new MenuItem(menuItemId, name, price, description, isAvailable);
+                    MenuItem menuItem = new MenuItem(menuItemId, name, (int) price, description, isAvailable);
                     orderList.add(menuItem);
                 }
             }
@@ -227,7 +227,7 @@ public class InvoiceDAO {
 
                 String description = ""; // hoặc null nếu cần
                 boolean isAvailable = true; // giá trị mặc định
-                MenuItem menuItem = new MenuItem(id, name, price, description, isAvailable);
+                MenuItem menuItem = new MenuItem(id, name, (int) price, description, isAvailable);
                 menuItems.add(menuItem);
             }
         }
@@ -236,15 +236,15 @@ public class InvoiceDAO {
 
     public List<MenuItem> getMenuItems() {
         List<MenuItem> menuItems = new ArrayList<>();
-        // Thực hiện truy vấn SQL để lấy các món ăn từ cơ sở dữ liệu
-        try (Connection connection = DatabaseConnector.getConnection()) {  // Thay đổi ở đây
+        try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "SELECT * FROM menu_items";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
                     int id = resultSet.getInt("id");
                     String name = resultSet.getString("name");
-                    double price = resultSet.getDouble("price");
+                    // Lấy giá trị price dưới dạng double rồi chuyển thành int
+                    int price = (int) resultSet.getDouble("price");
                     menuItems.add(new MenuItem(id, name, price));
                 }
             }

@@ -71,7 +71,6 @@ public class EmployeePanel extends JPanel {
 
     private void addEmployee() {
         try {
-            // Kiểm tra xem trường ID có trống không
             String idText = idField.getText();
             if (idText.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "ID không được để trống.");
@@ -79,7 +78,6 @@ public class EmployeePanel extends JPanel {
             }
             int id = Integer.parseInt(idText);
 
-            // Kiểm tra các trường tên và chức vụ
             String name = nameField.getText();
             if (name.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Tên không được để trống.");
@@ -92,23 +90,25 @@ public class EmployeePanel extends JPanel {
                 return;
             }
 
-            // Kiểm tra trường lương
             String salaryText = salaryField.getText();
             if (salaryText.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Lương không được để trống.");
                 return;
             }
 
-            double salary = Double.parseDouble(salaryText);
+            int salary = Integer.parseInt(salaryText); // Chuyển lương sang kiểu int
 
-            // Thêm nhân viên vào cơ sở dữ liệu
-            Employee employee = new Employee(id, name, position, salary);
+            if (salary < 0) {
+                JOptionPane.showMessageDialog(this, "Lương không thể là số âm.");
+                return;
+            }
+
+            Employee employee = new Employee(id, name, position, salary); // Dùng int cho salary
             employeeDAO.addEmployee(employee);
             JOptionPane.showMessageDialog(this, "Nhân viên đã được thêm.");
             clearInputFields();
         } catch (NumberFormatException ex) {
-            // Nếu có lỗi khi chuyển đổi kiểu dữ liệu
-            JOptionPane.showMessageDialog(this, "Lương và ID phải là số hợp lệ.");
+            JOptionPane.showMessageDialog(this, "ID và Lương phải là số hợp lệ.");
         }
     }
 
@@ -137,7 +137,6 @@ public class EmployeePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "ID phải là một số hợp lệ.");
         }
     }
-
 
     // Xóa các trường nhập liệu
     private void clearInputFields() {

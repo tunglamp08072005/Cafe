@@ -38,7 +38,7 @@ public class InvoicePanel extends JPanel {
         totalAmountField = new JTextField();
         inputPanel.add(totalAmountField);
 
-        inputPanel.add(new JLabel("Chọn Món Ăn:"));
+        inputPanel.add(new JLabel("Chọn Đồ Uống:"));
         menuItemComboBox = new JComboBox<>(new DefaultComboBoxModel<>(getMenuItems().toArray(new MenuItem[0])));
         inputPanel.add(menuItemComboBox);
 
@@ -113,24 +113,29 @@ public class InvoicePanel extends JPanel {
             }
 
             int id = Integer.parseInt(idText);
-            double totalAmount = Double.parseDouble(totalAmountText);
+            int totalAmount = 0; // Sửa kiểu thành int
 
-            // Kiểm tra nếu danh sách món ăn trống
-            List<MenuItem> orderList = getOrderListFromUI(); // Lấy danh sách món ăn từ UI
+            // Lấy danh sách món ăn từ UI và tính tổng tiền
+            List<MenuItem> orderList = getOrderListFromUI();
             if (orderList == null || orderList.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng thêm món ăn vào hóa đơn trước khi thêm.");
+                JOptionPane.showMessageDialog(this, "Vui lòng thêm đồ uống vào hóa đơn trước khi thêm.");
                 return;
+            }
+
+            for (MenuItem item : orderList) {
+                totalAmount += item.getPrice(); // Cộng giá của mỗi món ăn vào tổng tiền
             }
 
             // Tạo đối tượng hóa đơn và thêm vào database
             Invoice invoice = new Invoice(id, customerNameField.getText(), orderList, false);
             invoice.setTotalAmount(totalAmount);  // Cập nhật lại tổng tiền
+
             invoiceDAO.addInvoice(invoice);
 
             JOptionPane.showMessageDialog(this, "Hóa đơn đã được thêm.");
 
             // Làm mới danh sách hóa đơn trên giao diện
-            listInvoices(); // Cập nhật danh sách hóa đơn
+            listInvoices();
             clearInputFields();
 
         } catch (SQLException ex) {

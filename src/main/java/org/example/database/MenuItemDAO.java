@@ -23,7 +23,7 @@ public class MenuItemDAO {
                 String description = resultSet.getString("description");
                 boolean available = resultSet.getBoolean("is_available");
 
-                menuItems.add(new MenuItem(id, name, price, description, available));
+                menuItems.add(new MenuItem(id, name, (int) price, description, available));
             }
         } catch (SQLException e) {
             e.printStackTrace();

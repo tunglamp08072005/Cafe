@@ -8,14 +8,14 @@ public class Invoice {
     private final int id;
     private final String customerName;
     private List<MenuItem> orderList;
-    private double totalAmount;
+    private int totalAmount;
     private boolean isPaid;
 
     public Invoice(int id, String customerName, List<MenuItem> orderList, boolean isPaid) {
         this.id = id;
         this.customerName = customerName;
         this.orderList = orderList != null ? orderList : new ArrayList<>();
-        this.totalAmount = orderList != null ? calculateTotal() : 0.0;
+        this.totalAmount = (int) (orderList != null ? calculateTotal() : 0.0);
         this.isPaid = isPaid;
     }
 
@@ -46,7 +46,7 @@ public class Invoice {
     public void setPaid(boolean isPaid) {
         this.isPaid = isPaid;
     }
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -59,6 +59,6 @@ public class Invoice {
 
     public void setOrderList(List<MenuItem> orderList) {
         this.orderList = orderList;
-        this.totalAmount = calculateTotal();  // Tính lại tổng số tiền
+        this.totalAmount = (int) calculateTotal();  // Tính lại tổng số tiền
     }
 }

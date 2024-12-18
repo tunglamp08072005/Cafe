@@ -4,12 +4,12 @@ package org.example.coffeeshop;
 public class MenuItem {
     private int id;
     private String name;
-    private double price;
+    private int price;
     private String description;
     private boolean isAvailable;
 
     // Constructor
-    public MenuItem(int id, String name, double price, String description, boolean isAvailable) {
+    public MenuItem(int id, String name, int price, String description, boolean isAvailable) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -17,10 +17,11 @@ public class MenuItem {
         this.isAvailable = isAvailable;
     }
 
-    public MenuItem(int id, String name, double price) {
-        this(id, name, price, "", true);  // Gán mặc định cho description và isAvailable
+    public MenuItem(int id, String name, int price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;  // Lưu giá dưới dạng int
     }
-
 
     // Getters and Setters
     public int getId() {
@@ -39,11 +40,11 @@ public class MenuItem {
         this.name = name;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
